@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="org.cohorte.studio.eclipse.core.fragment"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            apply="initial"
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.cohorte.studio.eclipse.preferences.ui.CPreferencePage"
+            id="org.cohorte.studio.eclipse.core.ui.PreferencePage"
+            name="Cohorte Runtime">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.cohorte.studio.eclipse.preferences.ui.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.cohorte.studio.eclipse.core"
+            name="Cohorte Studio Core">
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
+   </extension>
+
+</plugin>
