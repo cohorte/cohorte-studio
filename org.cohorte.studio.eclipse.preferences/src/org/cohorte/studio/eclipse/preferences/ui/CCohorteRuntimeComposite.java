@@ -1,9 +1,15 @@
 package org.cohorte.studio.eclipse.preferences.ui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.cohorte.studio.eclipse.api.managers.ICohortePreferences;
+import org.cohorte.studio.eclipse.api.managers.ILogger;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
 import org.cohorte.studio.eclipse.utils.i18n.IInternationalizable;
 import org.eclipse.jface.viewers.ColumnPixelData;
@@ -42,9 +48,13 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 	private Button pRemoveButton;
 	private Button pSetDefaultButton;
 
-	private ArrayList<IRuntime> pRuntimes = new ArrayList<>();
+	private List<IRuntime> pRuntimes;
 
+	@Inject
 	private ICohortePreferences pPrefs;
+	
+	@Inject
+	private ILogger pLog;
 
 	CCohorteRuntimeComposite(Composite parent, int style) {
 		super(parent, style);
@@ -59,7 +69,7 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 		this.pLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 2, 1));
 
 		Table wTable = new Table(this,
-				SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.FULL_SELECTION | SWT.CHECK);
+				SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
 		wTable.setHeaderVisible(true);
 		wTable.setLinesVisible(true);
 		wTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 4));
@@ -113,9 +123,6 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 				removeSelection();
 			}
 		});
-
-		initializeValues();
-		enableButtons();
 	}
 
 	public void setEnabled(boolean enabled) {
@@ -153,6 +160,8 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 	}
 
 	protected void addRuntime() {
+		this.pLog.info("Add runtime callback.");
+		if (pRuntimes == null) return;
 		IRuntime wRuntime = promptForRuntime(null);
 		if (wRuntime != null) {
 			pRuntimes.add(0, wRuntime);
@@ -161,6 +170,8 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 	}
 
 	protected void removeSelection() {
+		this.pLog.info("Remove selection callback.");
+		if (pRuntimes == null) return;
 		IStructuredSelection selection = (IStructuredSelection) pViewer.getSelection();
 		Iterator<?> it = selection.iterator();
 		while (it.hasNext()) {
@@ -171,6 +182,7 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 	}
 
 	protected void editSelection() {
+		this.pLog.info("Edit selection callback.");
 		IStructuredSelection selection = (IStructuredSelection) pViewer.getSelection();
 		Object[] selectedItems = selection.toArray();
 		if (selectedItems.length == 0) return;
@@ -181,6 +193,7 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 	}
 
 	private IRuntime promptForRuntime(IRuntime selectedRutime) {
+		this.pLog.info("Prompt runtime.");
 		CRuntimeDialog wDialog = new CRuntimeDialog(
 				getShell(), i("Add new Cohorte Runtime"), selectedRutime, this.pPrefs);
 		
@@ -198,11 +211,7 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 		return button;
 	}
 
-	public void initializeValues() {
-		/**
-		 * TODO
-		 */
-	}
+
 
 	public void performApply() {
 		/**
@@ -214,8 +223,11 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 		pViewer.refresh();
 	}
 	
-	public void setPreferences(ICohortePreferences aPrefs) {
-		this.pPrefs = aPrefs;
+	@PostConstruct
+	public void initializeValues() {
+		pRuntimes = Arrays.asList(this.pPrefs.getRuntimes());
+		pViewer.setInput(pRuntimes);
+		enableButtons();
 	}
 }
 

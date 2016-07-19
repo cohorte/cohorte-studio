@@ -2,6 +2,8 @@ package org.cohorte.studio.eclipse.core.log;
 
 import java.util.IllegalFormatException;
 
+import javax.inject.Inject;
+
 import org.cohorte.studio.eclipse.api.managers.ILogger;
 import org.eclipse.e4.core.services.log.Logger;
 
@@ -17,6 +19,11 @@ import org.eclipse.e4.core.services.log.Logger;
 public class CLogger implements ILogger {
 	
 	private Logger pE4Logger;
+	
+	@Inject
+	public CLogger(Logger logger) {
+		this.pE4Logger = logger;
+	}
 
 	@Override
 	public void debug(String aPattern, Object... aArgs) {

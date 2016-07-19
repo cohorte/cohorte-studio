@@ -12,11 +12,8 @@ import org.cohorte.studio.eclipse.api.managers.ILogger;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.core.services.log.Logger;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
-
 
 /**
  * Preferences manager.
@@ -29,13 +26,11 @@ public class CPreferences implements ICohortePreferences {
 	private static final String ROOT_NODE_ID = "org.cohorte.studio.eclipse";
 	private static final String RUNTIMES = "runtimes";
 	
-	@Inject
-	public CPreferences(Logger aLogger) {
-		this.pLogger = aLogger;
-		System.out.println("Init Chrt preferences");
+	public CPreferences() {
 	}
 	
-	private Logger pLogger;
+	@Inject
+	private ILogger pLogger;
 	
 	@Override
 	public IRuntime[] getRuntimes() {
@@ -96,8 +91,4 @@ public class CPreferences implements ICohortePreferences {
 	protected Preferences getNode(String aPath) {
 		return getRootNode().node(aPath);
 	}
-	
-	@Execute
-	public void execute() {}
-
 }
