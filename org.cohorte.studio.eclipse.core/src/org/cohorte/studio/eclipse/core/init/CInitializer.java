@@ -61,6 +61,6 @@ public class CInitializer {
 	@PreDestroy
 	public void applicationShutdown() {
 			this.pRegistrar.clear();
-			this.pLog.info("Objects uninjected.");	
+			this.pLog.info("Cohorte components unregistered.");	
 	}
 }

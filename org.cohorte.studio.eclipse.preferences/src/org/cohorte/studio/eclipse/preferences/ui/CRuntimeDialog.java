@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -33,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
@@ -43,7 +43,7 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
  * @author Ahmad Shahwan
  *
  */
-public class CRuntimeDialog extends StatusDialog implements IInternationalizable {
+public class CRuntimeDialog extends StatusDialog {
 
 	private IRuntime pData;
 	private ICohortePreferences pPrefs;
@@ -92,13 +92,13 @@ public class CRuntimeDialog extends StatusDialog implements IInternationalizable
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		pNameLabel = new Label(composite, SWT.NONE);
-		pNameLabel.setText(i("Name:"));
+		pNameLabel.setText("Name:");
 		pNameLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 		pNameText = new Text(composite, SWT.BORDER);
 		pNameText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 
 		pPathLabel = new Label(composite, SWT.NONE);
-		pPathLabel.setText(i("Path"));
+		pPathLabel.setText("Path");
 		pPathLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 
 		pPathText = new Text(composite, SWT.BORDER);
@@ -107,11 +107,11 @@ public class CRuntimeDialog extends StatusDialog implements IInternationalizable
 		pPathText.setLayoutData(wLayout);
 		
 		pWorkspace = new Button(composite, SWT.BORDER);
-		pWorkspace.setText(i("Workspace..."));
+		pWorkspace.setText("Workspace...");
 		pWorkspace.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 		
 		pFilesystem = new Button(composite, SWT.BORDER);
-		pFilesystem.setText(i("Filesystem..."));
+		pFilesystem.setText("Filesystem...");
 		pFilesystem.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 
 		ModifyListener validationListener = new ModifyListener() {
@@ -151,7 +151,7 @@ public class CRuntimeDialog extends StatusDialog implements IInternationalizable
 			this.getShell(),
 			ResourcesPlugin.getWorkspace().getRoot(),
 			true,
-			i("Choose a location relative to workspace")
+			"Choose a location relative to workspace"
 		);
 		if (dialog.open() == Window.OK) {
 			Object[] result = dialog.getResult();
@@ -169,8 +169,8 @@ public class CRuntimeDialog extends StatusDialog implements IInternationalizable
 	private void openFilesystem() {
 		DirectoryDialog dialog = new DirectoryDialog(this.getShell());
 		dialog.setFilterPath(this.pPathText.getText().trim());
-		dialog.setText(i("Path to Cohorte runtime"));
-		dialog.setMessage(i("Choose a location on the filesystem"));
+		dialog.setText("Path to Cohorte runtime");
+		dialog.setMessage("Choose a location on the filesystem");
 		String result = dialog.open();
 		if (result != null) {
 			this.pPathText.setText(result);
@@ -208,10 +208,10 @@ public class CRuntimeDialog extends StatusDialog implements IInternationalizable
 		this.pDir = new File(pPathText.getText());
 		String wMsg = null;
 		if (!pDir.isDirectory()) {
-			wMsg = i("Invalid directory.");
+			wMsg = "Invalid directory.";
 		}
 		if ("".equals(pNameText.getText())) {
-			wMsg = i("Invalid name.");
+			wMsg = "Invalid name.";
 		}
 		if (wMsg != null) {
 			updateStatus(new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK, wMsg, null));
@@ -239,7 +239,7 @@ public class CRuntimeDialog extends StatusDialog implements IInternationalizable
 			}
 		}
 		if (wVersion == null) {
-			wVersion = i("N/A");
+			wVersion = "N/A";
 		}
 		return wVersion;		
 	}
@@ -248,7 +248,15 @@ public class CRuntimeDialog extends StatusDialog implements IInternationalizable
 	protected void okPressed() {
 		if (validate()) {
 			if (this.pData == null) {
-				this.pData = this.pPrefs.createRuntime();
+				try {
+					this.pData = this.pPrefs.createRuntime();
+				} catch (IOException e) {
+					MessageBox wDialog = new MessageBox(this.getShell(), SWT.ICON_ERROR | SWT.OK);
+					wDialog.setText("Error creating runtime");
+					wDialog.setMessage(e.getMessage());
+					wDialog.open();
+					return;
+				}
 			}
 			this.pData.setName(pNameText.getText());
 			this.pData.setPath(pPathText.getText());

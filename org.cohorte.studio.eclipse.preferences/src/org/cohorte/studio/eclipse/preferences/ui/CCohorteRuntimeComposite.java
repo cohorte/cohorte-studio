@@ -1,7 +1,7 @@
 package org.cohorte.studio.eclipse.preferences.ui;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import org.cohorte.studio.eclipse.api.managers.ICohortePreferences;
 import org.cohorte.studio.eclipse.api.managers.ILogger;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
-import org.cohorte.studio.eclipse.utils.i18n.IInternationalizable;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -33,13 +32,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 /**
  * A composite holding the list and controls of Cohorte available runtimes.
  */
-public class CCohorteRuntimeComposite extends Composite implements IInternationalizable {
+public class CCohorteRuntimeComposite extends Composite {
 
 	private Label pLabel;
 	TableViewer pViewer;
@@ -65,7 +65,7 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 		setLayout(new GridLayout(2, false));
 
 		this.pLabel = new Label(this, SWT.NONE);
-		this.pLabel.setText(i("Cohorte runtimes"));
+		this.pLabel.setText("Cohorte runtimes");
 		this.pLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 2, 1));
 
 		Table wTable = new Table(this,
@@ -77,7 +77,7 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 		this.pViewer = new TableViewer(wTable);
 		ITableLabelProvider labelProvider = new CCohorteRuntimeLabelProvider();
 		IStructuredContentProvider contentProvider = new CCohorteRuntimeContentProvider();
-		String[] titles = { i("Name"), i("Version"), i("Path") };
+		String[] titles = { "Name", "Version", "Path" };
 		for (int i = 0; i < titles.length; i++) {
 			TableColumn column = new TableViewerColumn(this.pViewer, SWT.NONE).getColumn();
 			column.setText(titles[i]);
@@ -87,15 +87,15 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 		pViewer.setLabelProvider(labelProvider);
 
 		TableLayout tableLayout = new TableLayout();
-		tableLayout.addColumnData(new ColumnPixelData(24));
-		tableLayout.addColumnData(new ColumnWeightData(50, 50, true));
-		tableLayout.addColumnData(new ColumnWeightData(50, 50, true));
+		tableLayout.addColumnData(new ColumnWeightData(40, 25, true));
+		tableLayout.addColumnData(new ColumnWeightData(20, 0, true));
+		tableLayout.addColumnData(new ColumnWeightData(40, 0, true));
 		wTable.setLayout(tableLayout);
 
-		this.pAddButton = createButton(i("Add"));
-		this.pEditButton = createButton(i("Edit"));
-		this.pRemoveButton = createButton(i("Remove"));
-		this.pSetDefaultButton = createButton(i("Set Default"));
+		this.pAddButton = createButton("Add");
+		this.pEditButton = createButton("Edit");
+		this.pRemoveButton = createButton("Remove");
+		this.pSetDefaultButton = createButton("Set Default");
 
 		pViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -123,6 +123,11 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 				removeSelection();
 			}
 		});
+		pSetDefaultButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				setDefault();
+			}
+		});
 	}
 
 	public void setEnabled(boolean enabled) {
@@ -133,11 +138,12 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 
 	protected void enableButtons() {
 		if (this.getEnabled()) {
-			boolean wRemovable = isSelectionRemovable();
+			boolean wSelected = isRuntimeSelected();
+			boolean wNotDefault = isDefaultSelected();
 			pAddButton.setEnabled(true);
-			pEditButton.setEnabled(true);
-			pRemoveButton.setEnabled(wRemovable);
-			pSetDefaultButton.setEnabled(wRemovable);
+			pEditButton.setEnabled(wSelected);
+			pRemoveButton.setEnabled(wNotDefault);
+			pSetDefaultButton.setEnabled(wNotDefault);
 		} else {
 			pAddButton.setEnabled(false);
 			pEditButton.setEnabled(false);
@@ -146,10 +152,8 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 		}
 	}
 
-	private boolean isSelectionRemovable() {
-		IStructuredSelection selection = (IStructuredSelection) pViewer
-				.getSelection();
-		Iterator<?> iterator = selection.iterator();
+	private boolean isDefaultSelected() {
+		Iterator<?> iterator = ((IStructuredSelection) pViewer.getSelection()).iterator();
 		boolean wRemovable = iterator.hasNext();
 		while (iterator.hasNext()) {
 			if (((IRuntime) iterator.next()).isDefault()) {
@@ -157,6 +161,10 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 			}
 		}
 		return wRemovable;
+	}
+	
+	private boolean isRuntimeSelected() {
+		return !pViewer.getSelection().isEmpty();
 	}
 
 	protected void addRuntime() {
@@ -176,7 +184,16 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 		Iterator<?> it = selection.iterator();
 		while (it.hasNext()) {
 			IRuntime data = (IRuntime) it.next();
-			pRuntimes.remove(data);
+			try {
+				data.remove();
+				pRuntimes.remove(data);
+			} catch (IOException e) {
+				MessageBox wDialog = new MessageBox(this.getShell(), SWT.ICON_ERROR | SWT.OK);
+				wDialog.setText("Error deleting runtime");
+				wDialog.setMessage(e.getMessage());
+				wDialog.open();
+				continue;
+			}
 		}
 		pViewer.refresh();
 	}
@@ -191,11 +208,27 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 			pViewer.refresh();
 		}
 	}
+	
+	protected void setDefault() {
+		this.pLog.info("Set default callback.");
+		IStructuredSelection selection = (IStructuredSelection) pViewer.getSelection();
+		Object[] selectedItems = selection.toArray();
+		if (selectedItems.length == 0) return;
+		IRuntime wRuntime = (IRuntime) selectedItems[0];
+		if (wRuntime != null) {
+			IRuntime wDefault = this.pPrefs.getDefaultRuntime();
+			if (wDefault != null) {
+				wDefault.setDefault(false);
+			}
+			wRuntime.setDefault(true);
+			pViewer.refresh();
+		}
+	}
 
 	private IRuntime promptForRuntime(IRuntime selectedRutime) {
 		this.pLog.info("Prompt runtime.");
 		CRuntimeDialog wDialog = new CRuntimeDialog(
-				getShell(), i("Add new Cohorte Runtime"), selectedRutime, this.pPrefs);
+				getShell(), "Add new Cohorte Runtime", selectedRutime, this.pPrefs);
 		
 		int result = wDialog.open();
 		if (result != Window.CANCEL) {
@@ -211,21 +244,30 @@ public class CCohorteRuntimeComposite extends Composite implements IInternationa
 		return button;
 	}
 
-
-
-	public void performApply() {
-		/**
-		 * TODO
-		 */
+	public boolean cancel() {
+		try {
+			this.pPrefs.rollback();
+		} catch (IOException e) {
+			this.pLog.error(e, "Error cancelling preference changes.");
+		}
+		return true;
 	}
 
-	public void refresh() {
-		pViewer.refresh();
+	public boolean apply() {
+		try {
+			this.pPrefs.commit();
+			return true;
+		} catch (IOException e) {
+			this.pLog.error(e, "Could not persist preferences.");
+			return false;
+		}
 	}
 	
 	@PostConstruct
 	public void initializeValues() {
-		pRuntimes = Arrays.asList(this.pPrefs.getRuntimes());
+		IRuntime[] wRuntimes = this.pPrefs.getRuntimes();
+		pRuntimes = new ArrayList<>(wRuntimes.length);
+		for (IRuntime wRuntime : wRuntimes) pRuntimes.add(wRuntime);
 		pViewer.setInput(pRuntimes);
 		enableButtons();
 	}

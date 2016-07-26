@@ -24,19 +24,21 @@ import org.osgi.service.prefs.Preferences;
 public class CPreferences implements ICohortePreferences {
 	
 	private static final String ROOT_NODE_ID = "org.cohorte.studio.eclipse";
+	private static final String COPY_NODE_ID = "org.cohorte.studio.eclipse.temp";
 	private static final String RUNTIMES = "runtimes";
-	
-	public CPreferences() {
-	}
+	private IEclipsePreferences pWorkingCopy;
 	
 	@Inject
 	private ILogger pLogger;
+
+	public CPreferences() {
+	}
 	
 	@Override
 	public IRuntime[] getRuntimes() {
-		Preferences wPrefs = getNode(RUNTIMES);
 		List<IRuntime> wRuntimes = new ArrayList<>();
 		try {
+			Preferences wPrefs = getNode(RUNTIMES);
 			String[] wChildren = wPrefs.childrenNames();
 			for (int i = 0; i < wChildren.length; i++) {
 				String wName = wChildren[i];
@@ -50,9 +52,10 @@ public class CPreferences implements ICohortePreferences {
 		return wRuntimes.toArray(new IRuntime[0]); 
 	}
 
+	@Override
 	public IRuntime getDefaultRuntime() {
-		Preferences wPrefs = getNode(RUNTIMES);
 		try {
+			Preferences wPrefs = getNode(RUNTIMES);
 			String[] wChildren = wPrefs.childrenNames();
 			for (int i = 0; i < wChildren.length; i++) {
 				IRuntime wRuntime = new CRuntimePreference(wPrefs.node(wChildren[i]));
@@ -68,27 +71,100 @@ public class CPreferences implements ICohortePreferences {
 	
 	
 	@Override
-	public IRuntime createRuntime() {
-		Preferences wPrefs = getNode(RUNTIMES);
-		String wName = UUID.randomUUID().toString();
-		return new CRuntimePreference(wPrefs.node(wName));
+	public IRuntime createRuntime() throws IOException {
+		Preferences wPrefs;
+		try {
+			wPrefs = getNode(RUNTIMES);
+			String wName = UUID.randomUUID().toString();
+			return new CRuntimePreference(wPrefs.node(wName));
+		} catch (BackingStoreException e) {
+			this.pLogger.error("Error obtaining runtime preferences.");
+			throw new IOException("Exception while obtaining runtime preferences.", e);
+		}
 	}
 
 	@Override
-	public void flush() throws IOException {
+	synchronized public void rollback() throws IOException {
+		if (this.pWorkingCopy != null) {
+			try {
+				Preferences parent = this.pWorkingCopy.parent();
+				this.pWorkingCopy.removeNode();
+				this.pWorkingCopy = null;
+				parent.flush();
+				this.pLogger.info("Preference changes rolled back.");
+			} catch (BackingStoreException e) {
+				this.pLogger.error(e, "Error rolling back preferences.");
+				throw new IOException("Cannot delete temporary preferences.", e);
+			}
+		}
+		this.pLogger.error("Preference changes rolled back.");
+	}
+	
+	@Override
+	synchronized public void commit() throws IOException {
 		try {
-			getRootNode().flush();
+			if (this.pWorkingCopy != null) {
+				IEclipsePreferences root = InstanceScope.INSTANCE.getNode(ROOT_NODE_ID);
+				this.purge(root);
+				this.copy(this.pWorkingCopy, root);
+				this.pWorkingCopy.removeNode();
+				this.pWorkingCopy = null;
+				root.flush();
+				this.pLogger.info("Preference changes commited.");
+			}
 		} catch (BackingStoreException e) {
-			this.pLogger.error(e, "Error writing preferences.");
+			this.pLogger.error(e, "Error commiting preferences.");
 			throw new IOException("Cannot persist changes to preferences.", e);
 		}		
 	}
-
-	protected IEclipsePreferences getRootNode() {
-		return InstanceScope.INSTANCE.getNode(ROOT_NODE_ID);
+	
+	protected void purge(Preferences prefs) throws BackingStoreException {
+		try {
+			for (String key : prefs.keys()) {
+				prefs.remove(key);
+			}
+			for (String name : prefs.childrenNames()) {
+				prefs.node(name).removeNode();
+			}
+		} catch (BackingStoreException e) {
+			this.pLogger.error("Error purging node.");
+			throw e;
+		}
 	}
 	
-	protected Preferences getNode(String aPath) {
+	protected void copy(Preferences source, Preferences dest) throws BackingStoreException {
+		try {
+			for (String key : source.keys()) {
+				String value = source.get(key, "");
+				dest.put(key, value);
+			}
+			for (String name : source.childrenNames()) {
+				Preferences child = source.node(name);
+				Preferences copy = dest.node(name);
+				copy(child, copy);
+			}
+		} catch (BackingStoreException e) {
+			this.pLogger.error("Error copying nodes.");
+			throw e;
+		}
+	}
+	
+	protected IEclipsePreferences getRootNode() throws BackingStoreException {
+		if (this.pWorkingCopy == null) {
+			IEclipsePreferences root = InstanceScope.INSTANCE.getNode(ROOT_NODE_ID);
+			this.pWorkingCopy = InstanceScope.INSTANCE.getNode(COPY_NODE_ID);
+			try {
+				purge(this.pWorkingCopy);
+				copy(root, this.pWorkingCopy);
+			} catch (BackingStoreException e) {
+				this.pLogger.error("Error creating temporary preferences.");
+				throw e;
+			}			
+		}
+		return this.pWorkingCopy;
+	}
+	
+	protected Preferences getNode(String aPath) throws BackingStoreException {
 		return getRootNode().node(aPath);
 	}
 }

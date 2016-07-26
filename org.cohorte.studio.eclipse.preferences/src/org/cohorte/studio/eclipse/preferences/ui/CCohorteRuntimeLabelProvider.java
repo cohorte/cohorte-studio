@@ -1,15 +1,17 @@
 package org.cohorte.studio.eclipse.preferences.ui;
 
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
-import org.cohorte.studio.eclipse.utils.i18n.IInternationalizable;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 
 public class CCohorteRuntimeLabelProvider extends BaseLabelProvider implements
-ITableLabelProvider, IColorProvider, IInternationalizable {
+ITableLabelProvider, IColorProvider, ITableFontProvider {
 
 	public CCohorteRuntimeLabelProvider() {
 		super();
@@ -50,6 +52,17 @@ ITableLabelProvider, IColorProvider, IInternationalizable {
 
 	@Override
 	public Color getForeground(Object element) {
+		return null;
+	}
+
+	@Override
+	public Font getFont(Object element, int columnIndex) {
+		if (element != null) {
+			IRuntime data = (IRuntime) element;
+			if (data.isDefault()) {
+				return JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT);
+			}
+		}
 		return null;
 	}
 

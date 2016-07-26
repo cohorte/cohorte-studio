@@ -46,6 +46,21 @@ public class CRegistrar {
 	}
 	
 	/**
+	 * Create registration record using a component.
+	 * This method takes an initiated components.
+	 * 
+	 * @param factory		registered factory
+	 * @param service		registered service
+	 */
+	public <T> Record<T> register(T component) {
+		ContextInjectionFactory.inject(component, this.pContext);
+		synchronized (this.pObjects) {
+			this.pObjects.add(component);
+		}
+		return new Record<>(component);
+	}
+	
+	/**
 	 * Unregister record.
 	 * 
 	 * @param object
@@ -55,23 +70,15 @@ public class CRegistrar {
 	}
 	
 	/**
-	 * Unregister component.
-	 * 
-	 * @param object
-	 */
-	public void unregister(Object object) {
-		ContextInjectionFactory.uninject(object, this.pContext);
-	}
-	
-	/**
 	 * Unregister all components.
 	 * 
 	 */
 	public void clear() {
 		synchronized (this.pObjects) {
 			for (Object wRef : pObjects) {
-				unregister(wRef);	
+				ContextInjectionFactory.uninject(wRef, this.pContext);
 			}
+			this.pObjects.clear();
 		}
 	}
 	
