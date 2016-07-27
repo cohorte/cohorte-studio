@@ -12,7 +12,6 @@ import javax.json.JsonReader;
 import org.cohorte.studio.eclipse.api.managers.ICohortePreferences;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
 import org.cohorte.studio.eclipse.preferences.Activator;
-import org.cohorte.studio.eclipse.utils.i18n.IInternationalizable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
