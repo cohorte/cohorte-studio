@@ -1,4 +1,4 @@
-package org.cohorte.studio.eclipse.preferences.ui;
+package org.cohorte.studio.eclipse.ui.preferences;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +11,6 @@ import javax.json.JsonReader;
 
 import org.cohorte.studio.eclipse.api.managers.ICohortePreferences;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
-import org.cohorte.studio.eclipse.preferences.Activator;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -213,7 +212,7 @@ public class CRuntimeDialog extends StatusDialog {
 			wMsg = "Invalid name.";
 		}
 		if (wMsg != null) {
-			updateStatus(new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK, wMsg, null));
+			updateStatus(new Status(IStatus.ERROR, CActivator.PLUGIN_ID, IStatus.OK, wMsg, null));
 			return false;
 		} else {
 			return true;

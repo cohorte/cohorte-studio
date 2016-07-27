@@ -1,4 +1,4 @@
-package org.cohorte.studio.eclipse.preferences.ui;
+package org.cohorte.studio.eclipse.ui.preferences;
 
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
 import org.eclipse.jface.resource.JFaceResources;

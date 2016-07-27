@@ -1,4 +1,4 @@
-package org.cohorte.studio.eclipse.preferences.ui;
+package org.cohorte.studio.eclipse.ui.preferences;
 
 import java.util.Collection;
 

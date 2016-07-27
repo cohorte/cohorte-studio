@@ -6,6 +6,7 @@ package org.cohorte.studio.eclipse.utils.i18n;
  * @author Ahmad Shahwan
  *
  */
+@Deprecated
 public interface IInternationalizable {
 	
 	/**

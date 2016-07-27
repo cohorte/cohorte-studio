@@ -1,4 +1,4 @@
-package org.cohorte.studio.eclipse.preferences.ui;
+package org.cohorte.studio.eclipse.ui.preferences;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import org.cohorte.studio.eclipse.api.managers.ICohortePreferences;
 import org.cohorte.studio.eclipse.api.managers.ILogger;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
-import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;

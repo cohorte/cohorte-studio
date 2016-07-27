@@ -13,7 +13,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="org.cohorte.studio.eclipse.preferences.ui.CPreferencePage"
+            class="org.cohorte.studio.eclipse.ui.preferences.CPreferencePage"
             id="org.cohorte.studio.eclipse.core.ui.PreferencePage"
             name="Cohorte Runtime">
       </page>

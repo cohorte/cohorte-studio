@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Cohorte Studio Preferences
-Bundle-SymbolicName: org.cohorte.studio.eclipse.preferences;singleton:=true
+Bundle-SymbolicName: org.cohorte.studio.eclipse.ui.preferences;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.cohorte.studio.eclipse.preferences.Activator
+Bundle-Activator: org.cohorte.studio.eclipse.ui.preferences.CActivator
 Bundle-Vendor: Cohorte Technologies
 Require-Bundle: javax.inject,
  org.eclipse.osgi,

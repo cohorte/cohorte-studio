@@ -1,4 +1,4 @@
-package org.cohorte.studio.eclipse.preferences.ui;
+package org.cohorte.studio.eclipse.ui.preferences;
 
 import org.cohorte.studio.eclipse.api.managers.ILogger;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;

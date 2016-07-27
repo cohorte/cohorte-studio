@@ -1,4 +1,4 @@
-package org.cohorte.studio.eclipse.preferences;
+package org.cohorte.studio.eclipse.ui.preferences;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -8,20 +8,20 @@ import org.osgi.framework.FrameworkUtil;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class CActivator extends AbstractUIPlugin {
 
 	/**
 	 * Plugin ID.
 	 */
-	public static final String PLUGIN_ID = FrameworkUtil.getBundle(Activator.class).getSymbolicName();
+	public static final String PLUGIN_ID = FrameworkUtil.getBundle(CActivator.class).getSymbolicName();
 	
 	// The shared instance
-	private static Activator plugin;
+	private static CActivator plugin;
 	
 	/**
 	 * The constructor
 	 */
-	public Activator() {
+	public CActivator() {
 	}
 
 	/*
@@ -47,7 +47,7 @@ public class Activator extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static CActivator getDefault() {
 		return plugin;
 	}
 
