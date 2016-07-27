@@ -54,9 +54,14 @@ public class CRuntimeDialog extends StatusDialog {
 	private Button pWorkspace;
 	private Button pFilesystem;
 
-	private static final String CONF_DIR = "conf";
-	private static final String VER_FILE = "version.js";
-	private static final String WS_LOC_FORMAT = "${workspace_loc:%s}";	
+	private static final String CONF_DIR = "conf"; //$NON-NLS-1$
+	private static final String VER_FILE = "version.js"; //$NON-NLS-1$
+	private static final String WS_LOC_FORMAT = "${workspace_loc:%s}";	 //$NON-NLS-1$
+	private static final String VER_FORMAT = "%s *"; //$NON-NLS-1$
+	private static final String STAGE = "stage"; //$NON-NLS-1$
+	private static final String VERSION = "version"; //$NON-NLS-1$
+	private static final String RELEASE = "release"; //$NON-NLS-1$
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 	
 	/**
 	 * Edit dialog constructor.
@@ -90,13 +95,13 @@ public class CRuntimeDialog extends StatusDialog {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		pNameLabel = new Label(composite, SWT.NONE);
-		pNameLabel.setText("Name:");
+		pNameLabel.setText(Messages.NAME);
 		pNameLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 		pNameText = new Text(composite, SWT.BORDER);
 		pNameText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 
 		pPathLabel = new Label(composite, SWT.NONE);
-		pPathLabel.setText("Path");
+		pPathLabel.setText(Messages.PATH);
 		pPathLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 
 		pPathText = new Text(composite, SWT.BORDER);
@@ -105,11 +110,11 @@ public class CRuntimeDialog extends StatusDialog {
 		pPathText.setLayoutData(wLayout);
 		
 		pWorkspace = new Button(composite, SWT.BORDER);
-		pWorkspace.setText("Workspace...");
+		pWorkspace.setText(Messages.WORKSPACE);
 		pWorkspace.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 		
 		pFilesystem = new Button(composite, SWT.BORDER);
-		pFilesystem.setText("Filesystem...");
+		pFilesystem.setText(Messages.FILESYSTEM);
 		pFilesystem.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 
 		ModifyListener validationListener = new ModifyListener() {
@@ -149,7 +154,7 @@ public class CRuntimeDialog extends StatusDialog {
 			this.getShell(),
 			ResourcesPlugin.getWorkspace().getRoot(),
 			true,
-			"Choose a location relative to workspace"
+			Messages.CHOOSE_LOCATION_WORKSPACE
 		);
 		if (dialog.open() == Window.OK) {
 			Object[] result = dialog.getResult();
@@ -167,8 +172,8 @@ public class CRuntimeDialog extends StatusDialog {
 	private void openFilesystem() {
 		DirectoryDialog dialog = new DirectoryDialog(this.getShell());
 		dialog.setFilterPath(this.pPathText.getText().trim());
-		dialog.setText("Path to Cohorte runtime");
-		dialog.setMessage("Choose a location on the filesystem");
+		dialog.setText(Messages.PATH_TO_RUNTIME);
+		dialog.setMessage(Messages.CHOOSE_LOCATION_FILESYSTEM);
 		String result = dialog.open();
 		if (result != null) {
 			this.pPathText.setText(result);
@@ -192,7 +197,7 @@ public class CRuntimeDialog extends StatusDialog {
 	}
 
 	private String toString(String str) {
-		return str == null ? "" : str;
+		return str == null ? EMPTY_STRING : str;
 	}
 
 	private void applyData() {
@@ -206,10 +211,10 @@ public class CRuntimeDialog extends StatusDialog {
 		this.pDir = new File(pPathText.getText());
 		String wMsg = null;
 		if (!pDir.isDirectory()) {
-			wMsg = "Invalid directory.";
+			wMsg = Messages.INVALIDE_DIRECTORY;
 		}
-		if ("".equals(pNameText.getText())) {
-			wMsg = "Invalid name.";
+		if (EMPTY_STRING.equals(pNameText.getText())) {
+			wMsg = Messages.INVALIDE_NAME;
 		}
 		if (wMsg != null) {
 			updateStatus(new Status(IStatus.ERROR, CActivator.PLUGIN_ID, IStatus.OK, wMsg, null));
@@ -225,19 +230,19 @@ public class CRuntimeDialog extends StatusDialog {
 		if (wVerFile.isFile()) {
 			try (JsonReader wReader = Json.createReader(new FileReader(wVerFile))) {
 				JsonObject wVerObject = wReader.readObject();
-				if (wVerObject.containsKey("version")) {
-					String wVer = wVerObject.getString("version");
+				if (wVerObject.containsKey(VERSION)) {
+					String wVer = wVerObject.getString(VERSION);
 					boolean wRelease = true;
-					if (wVerObject.containsKey("stage")) {
-						wRelease = "release".equalsIgnoreCase(wVerObject.getString("stage"));
+					if (wVerObject.containsKey(STAGE)) {
+						wRelease = RELEASE.equalsIgnoreCase(wVerObject.getString(STAGE));
 					}
-					wVersion = wRelease ? wVer : String.format("%s *", wVer);
+					wVersion = wRelease ? wVer : String.format(VER_FORMAT, wVer);
 				}
 			} catch (FileNotFoundException e) {
 			}
 		}
 		if (wVersion == null) {
-			wVersion = "N/A";
+			wVersion = Messages.N_A;
 		}
 		return wVersion;		
 	}
@@ -250,7 +255,7 @@ public class CRuntimeDialog extends StatusDialog {
 					this.pData = this.pPrefs.createRuntime();
 				} catch (IOException e) {
 					MessageBox wDialog = new MessageBox(this.getShell(), SWT.ICON_ERROR | SWT.OK);
-					wDialog.setText("Error creating runtime");
+					wDialog.setText(Messages.ERROR_CREATING_RUNTIME);
 					wDialog.setMessage(e.getMessage());
 					wDialog.open();
 					return;

@@ -64,7 +64,7 @@ public class CCohorteRuntimeComposite extends Composite {
 		setLayout(new GridLayout(2, false));
 
 		this.pLabel = new Label(this, SWT.NONE);
-		this.pLabel.setText("Cohorte runtimes");
+		this.pLabel.setText(CMessages.COHORTE_RUNTIME);
 		this.pLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 2, 1));
 
 		Table wTable = new Table(this,
@@ -76,7 +76,7 @@ public class CCohorteRuntimeComposite extends Composite {
 		this.pViewer = new TableViewer(wTable);
 		ITableLabelProvider labelProvider = new CCohorteRuntimeLabelProvider();
 		IStructuredContentProvider contentProvider = new CCohorteRuntimeContentProvider();
-		String[] titles = { "Name", "Version", "Path" };
+		String[] titles = { CMessages.NAME, CMessages.VERSION, CMessages.PATH };
 		for (int i = 0; i < titles.length; i++) {
 			TableColumn column = new TableViewerColumn(this.pViewer, SWT.NONE).getColumn();
 			column.setText(titles[i]);
@@ -91,10 +91,10 @@ public class CCohorteRuntimeComposite extends Composite {
 		tableLayout.addColumnData(new ColumnWeightData(40, 0, true));
 		wTable.setLayout(tableLayout);
 
-		this.pAddButton = createButton("Add");
-		this.pEditButton = createButton("Edit");
-		this.pRemoveButton = createButton("Remove");
-		this.pSetDefaultButton = createButton("Set Default");
+		this.pAddButton = createButton(CMessages.ADD);
+		this.pEditButton = createButton(CMessages.EDIT);
+		this.pRemoveButton = createButton(CMessages.REMOVE);
+		this.pSetDefaultButton = createButton(CMessages.SET_DEFAULT);
 
 		pViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -167,7 +167,7 @@ public class CCohorteRuntimeComposite extends Composite {
 	}
 
 	protected void addRuntime() {
-		this.pLog.info("Add runtime callback.");
+		this.pLog.info("Add runtime callback."); //$NON-NLS-1$
 		if (pRuntimes == null) return;
 		IRuntime wRuntime = promptForRuntime(null);
 		if (wRuntime != null) {
@@ -177,7 +177,7 @@ public class CCohorteRuntimeComposite extends Composite {
 	}
 
 	protected void removeSelection() {
-		this.pLog.info("Remove selection callback.");
+		this.pLog.info("Remove selection callback."); //$NON-NLS-1$
 		if (pRuntimes == null) return;
 		IStructuredSelection selection = (IStructuredSelection) pViewer.getSelection();
 		Iterator<?> it = selection.iterator();
@@ -188,7 +188,7 @@ public class CCohorteRuntimeComposite extends Composite {
 				pRuntimes.remove(data);
 			} catch (IOException e) {
 				MessageBox wDialog = new MessageBox(this.getShell(), SWT.ICON_ERROR | SWT.OK);
-				wDialog.setText("Error deleting runtime");
+				wDialog.setText("Error deleting runtime"); //$NON-NLS-1$
 				wDialog.setMessage(e.getMessage());
 				wDialog.open();
 				continue;
@@ -198,7 +198,7 @@ public class CCohorteRuntimeComposite extends Composite {
 	}
 
 	protected void editSelection() {
-		this.pLog.info("Edit selection callback.");
+		this.pLog.info("Edit selection callback."); //$NON-NLS-1$
 		IStructuredSelection selection = (IStructuredSelection) pViewer.getSelection();
 		Object[] selectedItems = selection.toArray();
 		if (selectedItems.length == 0) return;
@@ -209,7 +209,7 @@ public class CCohorteRuntimeComposite extends Composite {
 	}
 	
 	protected void setDefault() {
-		this.pLog.info("Set default callback.");
+		this.pLog.info("Set default callback."); //$NON-NLS-1$
 		IStructuredSelection selection = (IStructuredSelection) pViewer.getSelection();
 		Object[] selectedItems = selection.toArray();
 		if (selectedItems.length == 0) return;
@@ -225,9 +225,9 @@ public class CCohorteRuntimeComposite extends Composite {
 	}
 
 	private IRuntime promptForRuntime(IRuntime selectedRutime) {
-		this.pLog.info("Prompt runtime.");
+		this.pLog.info("Prompt runtime."); //$NON-NLS-1$
 		CRuntimeDialog wDialog = new CRuntimeDialog(
-				getShell(), "Add new Cohorte Runtime", selectedRutime, this.pPrefs);
+				getShell(), CMessages.ADD_NEW_COHORTE_RUNTIME, selectedRutime, this.pPrefs);
 		
 		int result = wDialog.open();
 		if (result != Window.CANCEL) {
@@ -247,7 +247,7 @@ public class CCohorteRuntimeComposite extends Composite {
 		try {
 			this.pPrefs.rollback();
 		} catch (IOException e) {
-			this.pLog.error(e, "Error cancelling preference changes.");
+			this.pLog.error(e, "Error cancelling preference changes."); //$NON-NLS-1$
 		}
 		return true;
 	}
@@ -257,7 +257,7 @@ public class CCohorteRuntimeComposite extends Composite {
 			this.pPrefs.commit();
 			return true;
 		} catch (IOException e) {
-			this.pLog.error(e, "Could not persist preferences.");
+			this.pLog.error(e, "Could not persist preferences."); //$NON-NLS-1$
 			return false;
 		}
 	}
