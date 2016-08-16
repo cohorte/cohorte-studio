@@ -58,7 +58,7 @@ public class CRuntimeDialog extends StatusDialog {
 
 	private static final String CONF_DIR = "conf"; //$NON-NLS-1$
 	private static final String VER_FILE = "version.js"; //$NON-NLS-1$
-	private static final String WS_LOC_FORMAT = "${workspace_loc:%s}";	 //$NON-NLS-1$
+	private static final String WS_LOC_FORMAT = "${workspace_loc:%s}"; //$NON-NLS-1$
 	private static final String VER_FORMAT = "%s *"; //$NON-NLS-1$
 	private static final String STAGE = "stage"; //$NON-NLS-1$
 	private static final String VERSION = "version"; //$NON-NLS-1$

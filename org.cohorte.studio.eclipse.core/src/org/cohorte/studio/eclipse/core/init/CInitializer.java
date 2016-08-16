@@ -38,9 +38,7 @@ public class CInitializer {
 	}
 
 	/**
-	 * On-application-start callback.
-	 * 
-	 * @param event
+	 * On-application-start.
 	 */
 	@PostConstruct
 	public void applicationStarted() {
@@ -54,9 +52,7 @@ public class CInitializer {
 	}
 	
 	/**
-	 * On-application-shutdown callback.
-	 * 
-	 * @param event
+	 * On-application-shutdown.
 	 */
 	@PreDestroy
 	public void applicationShutdown() {

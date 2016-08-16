@@ -18,3 +18,4 @@ Import-Package: javax.inject,
  org.cohorte.studio.eclipse.api.managers,
  org.cohorte.studio.eclipse.api.objects
 Bundle-ActivationPolicy: lazy
+Export-Package: org.cohorte.studio.eclipse.core.node

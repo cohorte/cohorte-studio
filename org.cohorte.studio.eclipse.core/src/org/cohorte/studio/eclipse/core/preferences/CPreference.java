@@ -6,6 +6,12 @@ import org.cohorte.studio.eclipse.api.objects.IPreference;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
+/**
+ * Preference item that is persisted as an Eclipse preference node.
+ * 
+ * @author Ahmad Shahwan
+ *
+ */
 public class CPreference implements IPreference {
 	
 	private Preferences pPref;

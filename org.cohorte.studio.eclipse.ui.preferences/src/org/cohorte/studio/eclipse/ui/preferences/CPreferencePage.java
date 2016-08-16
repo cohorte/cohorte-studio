@@ -41,7 +41,7 @@ public class CPreferencePage extends PreferencePage implements IWorkbenchPrefere
 
 		applyDialogFont(composite);
 		
-		if (this.pLog != null) this.pLog.info("Cohorte preference content composite created."); //$NON-NLS-1$
+		this.pLog.info("Cohorte preference content composite created."); //$NON-NLS-1$
 		return composite;
 	}
 
@@ -88,7 +88,7 @@ public class CPreferencePage extends PreferencePage implements IWorkbenchPrefere
 		if (this.pContext != null && this.pRuntimeComposite != null) {
 			ContextInjectionFactory.uninject(this.pRuntimeComposite, this.pContext);
 		}
-		if (this.pLog != null) this.pLog.info("Cohorte preference page disposed."); //$NON-NLS-1$
+		this.pLog.info("Cohorte preference page disposed."); //$NON-NLS-1$
 	}
 
 }

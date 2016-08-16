@@ -3,6 +3,13 @@ package org.cohorte.studio.eclipse.core.preferences;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
 import org.osgi.service.prefs.Preferences;
 
+/**
+ * Cohorte runtime preferences.
+ * An object of this type persists a Cohorte runtime as a preferences node.
+ * 
+ * @author Ahmad Shahwan
+ *
+ */
 public class CRuntimePreference extends CPreference implements IRuntime {
 	
 	private static final String NAME = "name";

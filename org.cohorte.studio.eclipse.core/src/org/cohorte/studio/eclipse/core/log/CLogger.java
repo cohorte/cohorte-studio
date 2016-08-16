@@ -67,7 +67,7 @@ public class CLogger implements ILogger {
 	private String format(String aPattern, Object... aArgs) {
 		try {
 			return String.format(aPattern, aArgs);
-		} catch (IllegalFormatException e) {
+		} catch (RuntimeException e) {
 			this.pE4Logger.error(e, "Format error!");
 			return aPattern;
 		}		
