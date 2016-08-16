@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.cohorte.studio.eclipse.ui.cohorte.project"
+            name="Cohorte">
+      </category>
+      <wizard
+            category="org.cohorte.studio.eclipse.ui.cohorte.project"
+            class="org.cohorte.studio.eclipse.ui.node.wizards.CNodeProjectWizard"
+            id="org.cohorte.studio.eclipse.ui.application.new.project"
+            name="New Cohorte Application Project"
+            project="true">
+      </wizard>
+   </extension>
+
+</plugin>
