@@ -1,10 +1,14 @@
 package org.cohorte.studio.eclipse.ui.node.wizards;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.cohorte.studio.eclipse.api.managers.ICohortePreferences;
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
+import org.eclipse.e4.core.di.annotations.Creatable;
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
@@ -21,10 +25,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.ide.IIDEHelpContextIds;
-import org.eclipse.ui.internal.ide.dialogs.ProjectContentsLocationArea;
 
+@Creatable
 public class CNodeProjectDetailsPage extends WizardPage implements INodeProjectPage {
 	
 	/**
@@ -32,9 +34,6 @@ public class CNodeProjectDetailsPage extends WizardPage implements INodeProjectP
 	 */
 	public static final String PAGE_NAME = "details"; //$NON-NLS-1$
 	
-	@NonNull
-	private INode pCohorteNode;	
-	@Nullable
 	private IStructuredSelection pCurrentSellection;
 	
 	private Label pNameLabel;
@@ -54,13 +53,31 @@ public class CNodeProjectDetailsPage extends WizardPage implements INodeProjectP
 	
 	private IRuntime[] pRuntimes;
 	
-
-	public CNodeProjectDetailsPage(@NonNull final INode aNode, @Nullable IStructuredSelection aSellection) {
+	private boolean pShown; 
+	
+	@Nullable
+	private INodeProjecrWizard pWizard;
+	
+	@Inject
+	public CNodeProjectDetailsPage(
+			@Optional @Named(IServiceConstants.ACTIVE_SELECTION)  IStructuredSelection aSellection) {
 		super(PAGE_NAME);
 		this.pCurrentSellection = aSellection;
+		this.pShown = false;
 		this.setTitle(CMessages.COHORTE_NODE_PROJECT);
 		this.setDescription(CMessages.CREATE_NEW_NODE_PROJECT);
-		this.pCohorteNode = aNode;
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		if (visible && !this.pShown) {
+			this.pShown = true;
+			INodeProjecrWizard wWizard = pWizard;
+			if (this.pNameText != null && wWizard != null) {
+				this.pNameText.setText(wWizard.getProjectName());
+			}
+		}
 	}
 	
 	@Override
@@ -87,13 +104,13 @@ public class CNodeProjectDetailsPage extends WizardPage implements INodeProjectP
 	}
 
 	@Override
-	public @NonNull INode getModel() {
-		return this.pCohorteNode;
+	public void updateModel(@NonNull INode aNode) {
+
 	}
 
 	private void createNodeGroup(@NonNull Composite aContainer) {
 		Group wGroup = createGroup(aContainer, 2);
-		wGroup.setText("Node");
+		wGroup.setText(CMessages.NODE);
 	
 		pNameLabel = createLabel(wGroup);
 		pNameLabel.setText(CMessages.NAME);
@@ -107,42 +124,43 @@ public class CNodeProjectDetailsPage extends WizardPage implements INodeProjectP
 		});
 		
 		pAutoStartButton = createButton(wGroup, SWT.CHECK, 2, 0);
-		pAutoStartButton.setText("Auto-start");
+		pAutoStartButton.setText(CMessages.AUTOSTART);
 		pAutoStartButton.setSelection(true);
 		
 		pUseCacheButton = createButton(wGroup, SWT.CHECK, 2, 0);
-		pUseCacheButton.setText("Auto-start");
+		pUseCacheButton.setText(CMessages.USE_CACHE);
 		pUseCacheButton.setSelection(true);
 		
 	}
 
 	private void createTransportGroup(@NonNull Composite aContainer) {
 		Group wGroup = createGroup(aContainer, 2);
-		wGroup.setText("Transport");
+		wGroup.setText(CMessages.TRANSPORT);
 		
 		pHttpButton = createButton(wGroup, SWT.CHECK, 2, 0);
-		pHttpButton.setText("HTTP");
+		pHttpButton.setText(CMessages.HTTP);
 		pIpVersionLabel = createLabel(wGroup);
-		pIpVersionLabel.setText("IP Version");
-		pIpVersionCombo = createCombo(wGroup);
+		pIpVersionLabel.setText(CMessages.IP_VERSION);
+		pIpVersionCombo = createCombo(wGroup, 60, 30);
 		pIpVersionCombo.setItems(new String[] {"4", "6"} );  //$NON-NLS-1$ //$NON-NLS-2$
 		pIpVersionCombo.select(0);
 		
 		pXmppButton = createButton(wGroup, SWT.CHECK, 2, 0);
-		pXmppButton.setText("XMPP");
+		pXmppButton.setText(CMessages.XMPP);
 		pServerLabel = createLabel(wGroup);
-		pServerLabel.setText("Sever");		
+		pServerLabel.setText(CMessages.SERVER);
+		pServerText = createText(wGroup);
 	}
 
 	private void createRuntimeGroup(@NonNull Composite aContainer) {
 		Group wGroup = createGroup(aContainer, 2);
-		wGroup.setText("Cohorte Runtime");
+		wGroup.setText(CMessages.COHORTE_RUNTIME);
 	
 		pRuntimeCombo = createCombo(wGroup);
 		pRuntimeCombo.setItems(getRuntimeNames());
 		pRuntimeCombo.select(getDefaultRuntimeIndex());
 		pManageButton = createButton(wGroup, SWT.NONE, 1, 0);
-		pManageButton.setText("Manage");
+		pManageButton.setText(CMessages.MANAGE);
 		
 	}
 	
@@ -183,6 +201,11 @@ public class CNodeProjectDetailsPage extends WizardPage implements INodeProjectP
 
 	private boolean validatePage() {
 		return true;
+	}
+	
+	@Inject @Optional
+	private void update(INodeProjecrWizard aWizard) {
+		pWizard = aWizard;
 	}
 
 }

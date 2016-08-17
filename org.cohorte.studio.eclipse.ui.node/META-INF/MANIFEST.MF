@@ -11,6 +11,10 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: org.cohorte.studio.eclipse.api.managers,
  org.cohorte.studio.eclipse.api.objects,
- org.cohorte.studio.eclipse.core.node,
+ org.cohorte.studio.eclipse.core.registry,
+ org.eclipse.core.resources,
  org.eclipse.e4.core.contexts,
- org.eclipse.e4.core.di
+ org.eclipse.e4.core.di,
+ org.eclipse.e4.core.di.annotations,
+ org.eclipse.e4.ui.services,
+ org.eclipse.pde.internal.ui.wizards

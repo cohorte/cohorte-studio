@@ -42,7 +42,19 @@ public interface INodeProjectPage extends IWizardPage {
 	}
 	
 	default Combo createCombo(Composite container) {
-		return new Combo(container, SWT.READ_ONLY | SWT.BORDER);
+		Combo wCombo = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		wCombo.setLayoutData(gd);
+		return wCombo;
+	}
+	
+	default Combo createCombo(Composite container, int width, int indent) {
+		Combo wCombo = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
+		GridData gd = new GridData();
+		gd.widthHint = width;
+		gd.horizontalIndent = indent;
+		wCombo.setLayoutData(gd);
+		return wCombo;
 	}
 	
 	default Group createGroup(Composite container, int cols) {
@@ -54,5 +66,5 @@ public interface INodeProjectPage extends IWizardPage {
 		return wGroup;
 	}
 	
-	INode getModel();
+	void updateModel(final INode aNode);
 }

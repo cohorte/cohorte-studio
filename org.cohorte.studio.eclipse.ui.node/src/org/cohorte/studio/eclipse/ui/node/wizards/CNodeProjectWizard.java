@@ -3,15 +3,15 @@ package org.cohorte.studio.eclipse.ui.node.wizards;
 import javax.inject.Inject;
 
 import org.cohorte.studio.eclipse.api.objects.INode;
-import org.cohorte.studio.eclipse.core.node.CNode;
-import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.cohorte.studio.eclipse.core.registry.CRegistrar;
+import org.cohorte.studio.eclipse.ui.node.objects.CNode;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
@@ -21,10 +21,7 @@ import org.eclipse.ui.PlatformUI;
  * @author Ahmad Shahwan
  *
  */
-public class CNodeProjectWizard extends Wizard implements INewWizard {
-	
-	@Nullable
-	private IStructuredSelection pSellection;
+public class CNodeProjectWizard extends Wizard implements INodeProjecrWizard {
 	
 	/**
 	 * Cohorte node.
@@ -32,31 +29,31 @@ public class CNodeProjectWizard extends Wizard implements INewWizard {
 	@NonNull
 	private INode pCohorteNode;
 	
-	@NonNull
-	private IEclipseContext pContext;
+	private CRegistrar pRegistrar;
 	
-	private IWizardPage pCreationPage;
-	private IWizardPage pDetailsPage;
+	@Inject
+	private CNodeProjectCreationPage pCreationPage;
+	
+	@Inject
+	private CNodeProjectDetailsPage pDetailsPage;
 
 	public CNodeProjectWizard() {
-		this.pCohorteNode = new CNode();
-		@Nullable IEclipseContext wContext = PlatformUI.getWorkbench().getService(IEclipseContext.class);
-		this.pContext = wContext;
+		pCohorteNode = new CNode();
+		pRegistrar = new CRegistrar(PlatformUI.getWorkbench().getService(IEclipseContext.class));
+		pRegistrar.register(this).as(INodeProjecrWizard.class);
 	}
 
 	@Override
-	synchronized public void init(IWorkbench workbench, IStructuredSelection aSellection) {
+	public void init(IWorkbench workbench, IStructuredSelection aSellection) {
 		this.pCohorteNode = new CNode();
-		this.pSellection = aSellection;
-		this.pCreationPage = new CNodeProjectCreationPage(this.pCohorteNode, getSellection());
-		this.pDetailsPage = new CNodeProjectDetailsPage(this.pCohorteNode, getSellection());
-		ContextInjectionFactory.inject(this.pCreationPage, this.pContext);
-		ContextInjectionFactory.inject(this.pDetailsPage, this.pContext);
 	}
 
 	@Override
 	public boolean performFinish() {
-		return false;
+		IProjectDescription wDescription = getProject().getWorkspace().newProjectDescription(getProjectName());
+		wDescription.setLocation(getLocationPath());
+		getProject().create(null);
+		return true;
 	}
 	
 	@Override
@@ -66,14 +63,34 @@ public class CNodeProjectWizard extends Wizard implements INewWizard {
 	}
 	
 	@Override
-	synchronized public void dispose() {
+	public void dispose() {
 		super.dispose();
-		if (this.pCreationPage != null) ContextInjectionFactory.uninject(this.pCreationPage, this.pContext);
-		if (this.pDetailsPage != null) ContextInjectionFactory.uninject(this.pDetailsPage, this.pContext);
+		pRegistrar.clear();
+	}
+	
+	@Override
+	public INode getModel() {
+		return this.pCohorteNode;
 	}
 
-	protected IStructuredSelection getSellection() {
-		return this.pSellection;
+	@Override
+	public String getProjectName() {
+		String wName = this.pCreationPage.getProjectName();
+		return wName == null ? "" : wName; //$NON-NLS-1$
+	}
+
+	@Override
+	public IPath getLocationPath() {
+		IPath wPath = this.pCreationPage.getLocationPath();
+		if (wPath == null) {
+			throw new RuntimeException("Project path is null"); //$NON-NLS-1$
+		}
+		return wPath;
+	}
+
+	@Override
+	public IProject getProject() {
+		return this.pCreationPage.getProjectHandle();
 	}
 
 }

@@ -28,10 +28,17 @@ public class CPreferences implements ICohortePreferences {
 	private static final String RUNTIMES = "runtimes";
 	private IEclipsePreferences pWorkingCopy;
 	
-	@Inject
 	private ILogger pLogger;
 
-	public CPreferences() {
+	/**
+	 * Constructor. Passing injected members through constructor allows the object to be used through injection and
+	 * through classical construction.
+	 * 
+	 * @param aLogger
+	 */
+	@Inject
+	public CPreferences(ILogger aLogger) {
+		this.pLogger = aLogger;
 	}
 	
 	@Override

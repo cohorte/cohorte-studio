@@ -1,8 +1,10 @@
-package org.cohorte.studio.eclipse.core.node;
+package org.cohorte.studio.eclipse.ui.node.objects;
 
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
 import org.cohorte.studio.eclipse.api.objects.ITransport;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Cohorte node object.
@@ -10,17 +12,22 @@ import org.cohorte.studio.eclipse.api.objects.ITransport;
  * @author Ahmad Shahwan
  *
  */
+@NonNullByDefault
 public class CNode implements INode {
-	
+
 	private String pName;
 	private boolean pAutoStart;
 	private boolean pUseCache;
 	private ITransport[] pTransports;
+	@Nullable
 	private IRuntime pRuntime;
 	private String pAppName;
 	private boolean pComposer;
-
+	
 	public CNode() {
+		this.pName = ""; //$NON-NLS-1$
+		this.pTransports = new ITransport[0];
+		this.pAppName = ""; //$NON-NLS-1$
 	}
 
 	@Override
@@ -64,6 +71,7 @@ public class CNode implements INode {
 		this.pTransports = aTransports;
 	}
 
+	@Nullable
 	@Override
 	public IRuntime getRuntime() {
 		return this.pRuntime;

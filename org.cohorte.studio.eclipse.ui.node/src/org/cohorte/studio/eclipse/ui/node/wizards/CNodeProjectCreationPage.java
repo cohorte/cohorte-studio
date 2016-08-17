@@ -1,8 +1,13 @@
 package org.cohorte.studio.eclipse.ui.node.wizards;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.cohorte.studio.eclipse.api.objects.INode;
+import org.eclipse.e4.core.di.annotations.Creatable;
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -23,6 +28,7 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
  * @author Ahmad Shahwan
  *
  */
+@Creatable
 public class CNodeProjectCreationPage extends WizardNewProjectCreationPage implements INodeProjectPage {
 	
 	/**
@@ -30,21 +36,19 @@ public class CNodeProjectCreationPage extends WizardNewProjectCreationPage imple
 	 */
 	public static final String PAGE_NAME = "creation"; //$NON-NLS-1$
 	
-	@NonNull
-	private INode pCohorteNode;	
-	@Nullable
 	private IStructuredSelection pCurrentSellection;
 
 	private Button pComposerButton;
 	private Label pAppNameLabel;
 	private Text pAppNameText;
 	
-	public CNodeProjectCreationPage(@NonNull final INode aNode, @Nullable IStructuredSelection aSellection) {
+	@Inject
+	public CNodeProjectCreationPage(
+			@Optional @Named(IServiceConstants.ACTIVE_SELECTION) IStructuredSelection aSellection) {
 		super(PAGE_NAME);
 		this.pCurrentSellection = aSellection;
 		this.setTitle(CMessages.COHORTE_NODE_PROJECT);
 		this.setDescription(CMessages.CREATE_NEW_NODE_PROJECT);
-		this.pCohorteNode = aNode;
 	}
 	
 	@Override
@@ -62,11 +66,6 @@ public class CNodeProjectCreationPage extends WizardNewProjectCreationPage imple
 
 		Dialog.applyDialogFont(wControl);
 		setControl(wControl);
-	}
-
-	@Override
-	public INode getModel() {
-		return this.pCohorteNode;
 	}
 
 	protected void createApplicationGroup(Composite aContainer) {
@@ -91,5 +90,10 @@ public class CNodeProjectCreationPage extends WizardNewProjectCreationPage imple
 		pComposerButton = createButton(wGroup, SWT.CHECK, 2, 0);
 		pComposerButton.setText(CMessages.TOP_LEVEL_COMPOSER);
 		pComposerButton.setSelection(true);
+	}
+
+	@Override
+	public void updateModel(@NonNull INode aNode) {
+		
 	}
 }
