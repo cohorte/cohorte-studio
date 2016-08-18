@@ -15,5 +15,15 @@
             project="true">
       </wizard>
    </extension>
+   <extension
+         id="NodeNature"
+         name="Cohorte Node Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="org.cohorte.studio.eclipse.ui.node.CNodeProjectNature">
+         </run>
+      </runtime>
+   </extension>
 
 </plugin>
