@@ -6,8 +6,8 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.cohorte.studio.eclipse.ui.node.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.ui.ide;bundle-version="3.12.0",
- org.eclipse.core.expressions;bundle-version="3.5.100"
+ org.eclipse.core.expressions,
+ org.eclipse.ui.ide
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: org.cohorte.studio.eclipse.api.managers,

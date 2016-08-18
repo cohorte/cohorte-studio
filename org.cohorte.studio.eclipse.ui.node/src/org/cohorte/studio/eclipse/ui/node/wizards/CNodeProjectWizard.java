@@ -1,13 +1,22 @@
 package org.cohorte.studio.eclipse.ui.node.wizards;
 
+import java.net.URI;
+
 import javax.inject.Inject;
 
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.core.registry.CRegistrar;
+import org.cohorte.studio.eclipse.ui.node.nature.CNodeProjectNature;
 import org.cohorte.studio.eclipse.ui.node.objects.CNode;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -50,9 +59,35 @@ public class CNodeProjectWizard extends Wizard implements INodeProjecrWizard {
 
 	@Override
 	public boolean performFinish() {
-		IProjectDescription wDescription = getProject().getWorkspace().newProjectDescription(getProjectName());
-		wDescription.setLocation(getLocationPath());
-		getProject().create(null);
+		IProject wProject = getProject();
+		IProgressMonitor wMonitor = new NullProgressMonitor();
+		IProjectDescription wDescription = wProject.getWorkspace().newProjectDescription(getProjectName());
+		
+		/**
+		 * @see org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard#createProject()
+		 */
+		URI wLocation = null;
+		if (!pCreationPage.useDefaults()) {
+			wLocation = pCreationPage.getLocationURI();
+		}
+		wDescription.setLocationURI(wLocation);
+		
+		String[] wNatures = wDescription.getNatureIds();
+		String[] wNewNatures = new String[wNatures.length + 1];
+		System.arraycopy(wNatures, 0, wNewNatures, 0, wNatures.length);
+		wNewNatures[wNatures.length] = CNodeProjectNature.ID;
+		IWorkspace wWorkspace = ResourcesPlugin.getWorkspace();
+		if (wWorkspace.validateNatureSet(wNewNatures).getCode() == IStatus.OK) {
+			wDescription.setNatureIds(wNewNatures);
+		} else {
+			return false;
+		}
+		try {
+			wProject.create(wDescription, wMonitor);
+		} catch (CoreException e) {
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 	
