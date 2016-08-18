@@ -1,4 +1,4 @@
-package org.cohorte.studio.eclipse.ui.node.nature;
+package org.cohorte.studio.eclipse.ui.node.project;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;

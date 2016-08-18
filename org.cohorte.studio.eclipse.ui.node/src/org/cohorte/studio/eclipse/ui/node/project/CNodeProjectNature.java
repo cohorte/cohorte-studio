@@ -1,4 +1,4 @@
-package org.cohorte.studio.eclipse.ui.node.nature;
+package org.cohorte.studio.eclipse.ui.node.project;
 
 import org.cohorte.studio.eclipse.ui.node.Activator;
 import org.eclipse.core.resources.IProject;

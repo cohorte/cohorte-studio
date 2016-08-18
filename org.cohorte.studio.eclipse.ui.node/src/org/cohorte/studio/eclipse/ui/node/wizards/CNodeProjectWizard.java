@@ -6,17 +6,10 @@ import javax.inject.Inject;
 
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.core.registry.CRegistrar;
-import org.cohorte.studio.eclipse.ui.node.nature.CNodeProjectNature;
 import org.cohorte.studio.eclipse.ui.node.objects.CNode;
+import org.cohorte.studio.eclipse.ui.node.project.CNodeProjectNature;
+import org.cohorte.studio.eclipse.ui.node.utils.CProjectUtils;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -45,6 +38,9 @@ public class CNodeProjectWizard extends Wizard implements INodeProjecrWizard {
 	
 	@Inject
 	private CNodeProjectDetailsPage pDetailsPage;
+	
+	@Inject
+	private CProjectUtils pUtils; 
 
 	public CNodeProjectWizard() {
 		pCohorteNode = new CNode();
@@ -59,35 +55,9 @@ public class CNodeProjectWizard extends Wizard implements INodeProjecrWizard {
 
 	@Override
 	public boolean performFinish() {
-		IProject wProject = getProject();
-		IProgressMonitor wMonitor = new NullProgressMonitor();
-		IProjectDescription wDescription = wProject.getWorkspace().newProjectDescription(getProjectName());
-		
-		/**
-		 * @see org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard#createProject()
-		 */
-		URI wLocation = null;
-		if (!pCreationPage.useDefaults()) {
-			wLocation = pCreationPage.getLocationURI();
-		}
-		wDescription.setLocationURI(wLocation);
-		
-		String[] wNatures = wDescription.getNatureIds();
-		String[] wNewNatures = new String[wNatures.length + 1];
-		System.arraycopy(wNatures, 0, wNewNatures, 0, wNatures.length);
-		wNewNatures[wNatures.length] = CNodeProjectNature.ID;
-		IWorkspace wWorkspace = ResourcesPlugin.getWorkspace();
-		if (wWorkspace.validateNatureSet(wNewNatures).getCode() == IStatus.OK) {
-			wDescription.setNatureIds(wNewNatures);
-		} else {
-			return false;
-		}
-		try {
-			wProject.create(wDescription, wMonitor);
-		} catch (CoreException e) {
-			e.printStackTrace();
-			return false;
-		}
+		IProject wProject = this.pUtils.createProject(this, new String [] { CNodeProjectNature.ID });
+		if (wProject == null) return false;
+		this.pUtils.addToWorkingSets(wProject, this.pCreationPage.getSelectedWorkingSets());
 		return true;
 	}
 	
@@ -115,12 +85,15 @@ public class CNodeProjectWizard extends Wizard implements INodeProjecrWizard {
 	}
 
 	@Override
-	public IPath getLocationPath() {
-		IPath wPath = this.pCreationPage.getLocationPath();
-		if (wPath == null) {
-			throw new RuntimeException("Project path is null"); //$NON-NLS-1$
+	public URI getLocationUri() {
+		/**
+		 * @see org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard#createProject()
+		 */
+		if (!pCreationPage.useDefaults()) {
+			return pCreationPage.getLocationURI();
+		} else {
+			return null;
 		}
-		return wPath;
 	}
 
 	@Override

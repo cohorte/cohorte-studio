@@ -21,7 +21,7 @@
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="org.cohorte.studio.eclipse.ui.node.nature.CNodeProjectNature">
+               class="org.cohorte.studio.eclipse.ui.node.project.CNodeProjectNature">
          </run>
       </runtime>
    </extension>
@@ -36,7 +36,7 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            class="org.cohorte.studio.eclipse.ui.node.nature.BundlesSettingsPage"
+            class="org.cohorte.studio.eclipse.ui.node.project.BundlesSettingsPage"
             id="org.cohorte.studio.eclipse.ui.node.BundlesPage"
             name="Cohorte Bundles">
          <enabledWhen>
