@@ -21,7 +21,7 @@
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="org.cohorte.studio.eclipse.ui.node.CNodeProjectNature">
+               class="org.cohorte.studio.eclipse.ui.node.nature.CNodeProjectNature">
          </run>
       </runtime>
    </extension>
@@ -32,6 +32,31 @@
             id="org.cohorte.studio.eclipse.ui.node.NodeNatureImage"
             natureId="org.cohorte.studio.eclipse.ui.node.NodeProjectNature">
       </image>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.cohorte.studio.eclipse.ui.node.nature.BundlesSettingsPage"
+            id="org.cohorte.studio.eclipse.ui.node.BundlesPage"
+            name="Cohorte Bundles">
+         <enabledWhen>
+            <reference
+                  definitionId="org.cohorte.studio.eclipse.ui.node.HasNodeNature">
+            </reference></enabledWhen>
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="org.cohorte.studio.eclipse.ui.node.HasNodeNature">
+         <adapt
+               type="org.eclipse.core.resources.IProject">
+            <test
+                  property="org.eclipse.core.resources.projectNature"
+                  value="org.cohorte.studio.eclipse.ui.node.NodeProjectNature">
+            </test>
+         </adapt>
+      </definition>
    </extension>
 
 </plugin>

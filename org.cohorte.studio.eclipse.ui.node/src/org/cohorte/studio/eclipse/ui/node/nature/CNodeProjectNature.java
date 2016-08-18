@@ -1,5 +1,6 @@
-package org.cohorte.studio.eclipse.ui.node;
+package org.cohorte.studio.eclipse.ui.node.nature;
 
+import org.cohorte.studio.eclipse.ui.node.Activator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
