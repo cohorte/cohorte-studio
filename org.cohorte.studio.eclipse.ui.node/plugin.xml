@@ -28,7 +28,7 @@
    <extension
          point="org.eclipse.ui.ide.projectNatureImages">
       <image
-            icon="icons/co_8x8.png"
+            icon="resources/icons/co_8x8.png"
             id="org.cohorte.studio.eclipse.ui.node.NodeNatureImage"
             natureId="org.cohorte.studio.eclipse.ui.node.NodeNature">
       </image>

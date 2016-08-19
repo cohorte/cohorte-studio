@@ -3,14 +3,16 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Cohorte Application Project
 Bundle-SymbolicName: org.cohorte.studio.eclipse.ui.node;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.cohorte.studio.eclipse.ui.node.Activator
+Bundle-Activator: org.cohorte.studio.eclipse.ui.node.CActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.expressions,
  org.eclipse.ui.ide
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Import-Package: org.cohorte.studio.eclipse.api.managers,
+Import-Package: javax.json;version="1.0.0",
+ javax.json.stream;version="1.0.0",
+ org.cohorte.studio.eclipse.api.managers,
  org.cohorte.studio.eclipse.api.objects,
  org.cohorte.studio.eclipse.core.api,
  org.cohorte.studio.eclipse.ui.api,

@@ -4,13 +4,16 @@ import java.net.URI;
 
 import javax.inject.Inject;
 
+import org.cohorte.studio.eclipse.api.managers.ILogger;
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.core.api.IProjectFactory;
 import org.cohorte.studio.eclipse.ui.api.CUIRegistrar;
 import org.cohorte.studio.eclipse.ui.api.IProjectUtils;
 import org.cohorte.studio.eclipse.ui.node.objects.CNode;
+import org.cohorte.studio.eclipse.ui.node.project.CNodeContentManager;
 import org.cohorte.studio.eclipse.ui.node.project.CNodeProjectNature;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -43,6 +46,12 @@ public class CNodeProjectWizard extends Wizard implements INodeProjecrWizard {
 	@Inject
 	private IProjectUtils pUtils; 
 	
+	@Inject
+	private CNodeContentManager pContentManager;
+	
+	@Inject
+	private ILogger pLogger;
+	
 	public CNodeProjectWizard() {
 		pCohorteNode = new CNode();
 		pRegistrar = new CUIRegistrar();
@@ -57,7 +66,16 @@ public class CNodeProjectWizard extends Wizard implements INodeProjecrWizard {
 	@Override
 	public boolean performFinish() {
 		IProject wProject = this.pFactory.createProject(this, new String [] { CNodeProjectNature.ID });
-		if (wProject == null) return false;
+		if (wProject == null) {
+			this.pLogger.warning("Project is null."); //$NON-NLS-1$
+			return false;
+		}
+		try {
+			wProject.open(null);
+			this.pContentManager.populate(wProject, this.getModel());
+		} catch (CoreException e) {
+			this.pLogger.error(e, "Error populating Cohorte node project."); //$NON-NLS-1$
+		}
 		this.pUtils.addToWorkingSets(wProject, this.pCreationPage.getSelectedWorkingSets());
 		this.pUtils.updatePerspective();
 		return true;

@@ -1,6 +1,6 @@
 package org.cohorte.studio.eclipse.ui.node.project;
 
-import org.cohorte.studio.eclipse.ui.node.Activator;
+import org.cohorte.studio.eclipse.ui.node.CActivator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
@@ -9,7 +9,7 @@ public class CNodeProjectNature implements IProjectNature {
 	
 	public static final String ID = String.format(
 			"%s.%s", //$NON-NLS-1$
-			Activator.getDefault().getBundle().getSymbolicName(),
+			CActivator.getDefault().getBundle().getSymbolicName(),
 			"NodeNature");  //$NON-NLS-1$ 
 	
 	private IProject pProject;
