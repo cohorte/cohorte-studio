@@ -1,4 +1,4 @@
-package org.cohorte.studio.eclipse.ui.node.utils;
+package org.cohorte.studio.eclipse.core.api;
 
 import java.net.URI;
 

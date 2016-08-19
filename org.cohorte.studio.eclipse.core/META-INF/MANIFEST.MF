@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Cohorte Studio Core
 Bundle-SymbolicName: org.cohorte.studio.eclipse.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.cohorte.studio.eclipse.core.Activator
+Bundle-Activator: org.cohorte.studio.eclipse.core.CActivator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.e4.ui.model.workbench,
  org.eclipse.e4.core.services,
@@ -12,10 +12,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.osgi.services,
  org.eclipse.e4.ui.workbench,
  org.eclipse.e4.core.di.extensions,
- org.eclipse.e4.core.contexts
+ org.eclipse.e4.core.contexts,
+ org.eclipse.core.resources;bundle-version="3.11.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: javax.inject,
  org.cohorte.studio.eclipse.api.managers,
  org.cohorte.studio.eclipse.api.objects
 Bundle-ActivationPolicy: lazy
-Export-Package: org.cohorte.studio.eclipse.core.registry
+Export-Package: org.cohorte.studio.eclipse.core.api

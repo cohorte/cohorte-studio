@@ -1,4 +1,4 @@
-package org.cohorte.studio.eclipse.core.registry;
+package org.cohorte.studio.eclipse.core.api;
 
 import java.util.ArrayList;
 import java.util.List;

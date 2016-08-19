@@ -4,15 +4,15 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 
-public class Activator implements BundleActivator {
+public class CActivator implements BundleActivator {
 	
 	/**
 	 * Plugin ID.
 	 */
-	public static final String PLUGIN_ID = FrameworkUtil.getBundle(Activator.class).getSymbolicName();
+	public static final String PLUGIN_ID = FrameworkUtil.getBundle(CActivator.class).getSymbolicName();
 	
 	// The shared instance
-	private static Activator plugin;
+	private static CActivator plugin;
 
 	private static BundleContext context;
 
@@ -25,7 +25,7 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
-		Activator.context = bundleContext;
+		CActivator.context = bundleContext;
 		plugin = this;
 	}
 
@@ -34,7 +34,7 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
-		Activator.context = null;
+		CActivator.context = null;
 		plugin = null;
 	}
 	
@@ -43,7 +43,7 @@ public class Activator implements BundleActivator {
 	 *
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static CActivator getDefault() {
 		return plugin;
 	}
 

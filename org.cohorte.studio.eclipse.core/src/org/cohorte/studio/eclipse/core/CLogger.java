@@ -1,4 +1,4 @@
-package org.cohorte.studio.eclipse.core.log;
+package org.cohorte.studio.eclipse.core;
 
 import java.util.IllegalFormatException;
 

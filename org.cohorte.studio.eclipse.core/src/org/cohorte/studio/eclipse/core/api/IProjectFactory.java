@@ -1,12 +1,17 @@
-package org.cohorte.studio.eclipse.ui.node.utils;
+package org.cohorte.studio.eclipse.core.api;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.ui.IWorkingSet;
 
-public interface IProjectUtils {
-
+/**
+ * Project factory service.
+ * 
+ * @author Ahmad Shahwan
+ *
+ */
+public interface IProjectFactory {
+	
 	/**
 	 * Create new project, with the given natures.
 	 * 
@@ -23,12 +28,5 @@ public interface IProjectUtils {
 	 * @return
 	 */
 	@Nullable IProject createProject(@NonNull IProjectProvide aProvider, String @Nullable [] aNatures);
-	
-	/**
-	 * Add project to working sets.
-	 * 
-	 * @param wProject
-	 * @param aSets
-	 */
-	void addToWorkingSets(@NonNull IProject wProject, IWorkingSet[] aSets);
+
 }

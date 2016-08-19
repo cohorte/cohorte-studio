@@ -1,40 +1,35 @@
-package org.cohorte.studio.eclipse.ui.node.utils;
+package org.cohorte.studio.eclipse.core.project;
 
 import java.net.URI;
 
 import javax.inject.Inject;
 
 import org.cohorte.studio.eclipse.api.managers.ILogger;
+import org.cohorte.studio.eclipse.core.api.IProjectFactory;
+import org.cohorte.studio.eclipse.core.api.IProjectProvide;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkingSet;
 
-@Creatable
-public class CProjectUtils implements IProjectUtils {
+public class CProjectFactory implements IProjectFactory {
 	
 	@Inject
 	private ILogger pLogger;
 	
 	@Inject
 	private IWorkspace pWorkspace;
-	
-	@Inject
-	private IWorkbench pWorkbench;
+
 
 	@Inject
-	public CProjectUtils() {
+	public CProjectFactory() {
 	}
-	
+
 	/**
 	 * Create new project, with the given natures.
 	 * 
@@ -85,12 +80,6 @@ public class CProjectUtils implements IProjectUtils {
 	@Override
 	public @Nullable IProject createProject(@NonNull IProjectProvide aProvider) {
 		return this.createProject(aProvider, null);
-	}
-
-	@Override
-	public void addToWorkingSets(@NonNull IProject wProject, IWorkingSet[] aSets) {
-		this.pWorkbench.getWorkingSetManager().addToWorkingSets(wProject, aSets);
-		
 	}
 
 }

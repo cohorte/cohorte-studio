@@ -1,5 +1,5 @@
  
-package org.cohorte.studio.eclipse.core.init;
+package org.cohorte.studio.eclipse.core;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -7,11 +7,13 @@ import javax.inject.Inject;
 
 import org.cohorte.studio.eclipse.api.managers.ICohortePreferences;
 import org.cohorte.studio.eclipse.api.managers.ILogger;
-import org.cohorte.studio.eclipse.core.log.CLogger;
+import org.cohorte.studio.eclipse.core.api.CRegistrar;
+import org.cohorte.studio.eclipse.core.api.IProjectFactory;
 import org.cohorte.studio.eclipse.core.preferences.CPreferences;
-import org.cohorte.studio.eclipse.core.registry.CRegistrar;
+import org.cohorte.studio.eclipse.core.project.CProjectFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.log.Logger;
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * Initialization component.
@@ -22,8 +24,8 @@ import org.eclipse.e4.core.services.log.Logger;
  */
 public class CInitializer {
 	
-	private CRegistrar pRegistrar;
-	private ILogger pLog;
+	private @NonNull CRegistrar pRegistrar;
+	private @NonNull ILogger pLog;
 	
 	/**
 	 * Constructor.
@@ -43,12 +45,16 @@ public class CInitializer {
 	@PostConstruct
 	public void applicationStarted() {
 		// Register Cohorte logger component
-		this.pRegistrar.register(CLogger.class).as(ILogger.class);
+		this.pRegistrar.register(this.pLog).as(ILogger.class);
 		this.pLog.info("Cohorte logger registered.");
 		
 		// Register Cohorte preferences component
 		this.pRegistrar.register(CPreferences.class).as(ICohortePreferences.class);
 		this.pLog.info("Cohorte preferences registered.");
+		
+		// Register Cohorte project factory
+		this.pRegistrar.register(CProjectFactory.class).as(IProjectFactory.class);
+		this.pLog.info("Cohorte project factory registered.");
 	}
 	
 	/**
