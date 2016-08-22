@@ -2,6 +2,8 @@ package org.cohorte.studio.eclipse.ui.components;
 
 import javax.inject.Inject;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
+import org.cohorte.studio.eclipse.api.annotations.Nullable;
 import org.cohorte.studio.eclipse.api.managers.ILogger;
 import org.cohorte.studio.eclipse.ui.CActivator;
 import org.cohorte.studio.eclipse.ui.api.IProjectUtils;
@@ -9,8 +11,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbench;

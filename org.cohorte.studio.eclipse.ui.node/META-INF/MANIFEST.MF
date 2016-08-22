@@ -12,6 +12,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.json;version="1.0.0",
  javax.json.stream;version="1.0.0",
+ org.cohorte.studio.eclipse.api.annotations,
  org.cohorte.studio.eclipse.api.managers,
  org.cohorte.studio.eclipse.api.objects,
  org.cohorte.studio.eclipse.core.api,

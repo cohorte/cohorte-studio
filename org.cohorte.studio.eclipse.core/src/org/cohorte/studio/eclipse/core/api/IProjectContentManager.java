@@ -1,8 +1,8 @@
 package org.cohorte.studio.eclipse.core.api;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
 import org.cohorte.studio.eclipse.api.objects.IProjectModel;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * Generic project content management service.

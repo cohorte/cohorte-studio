@@ -13,9 +13,9 @@ import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonWriter;
-import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
 import org.cohorte.studio.eclipse.api.objects.ITransport;
@@ -24,7 +24,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.core.di.annotations.Creatable;
-import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * Node project content manager.

@@ -1,10 +1,10 @@
 package org.cohorte.studio.eclipse.ui.node.objects;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNullByDefault;
+import org.cohorte.studio.eclipse.api.annotations.Nullable;
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
 import org.cohorte.studio.eclipse.api.objects.ITransport;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Cohorte node object.

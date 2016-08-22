@@ -1,8 +1,8 @@
 package org.cohorte.studio.eclipse.core.api;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
+import org.cohorte.studio.eclipse.api.annotations.Nullable;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Project factory service.

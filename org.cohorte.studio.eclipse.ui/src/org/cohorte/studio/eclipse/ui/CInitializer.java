@@ -5,11 +5,11 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
 import org.cohorte.studio.eclipse.core.api.CRegistrar;
 import org.cohorte.studio.eclipse.ui.api.IProjectUtils;
 import org.cohorte.studio.eclipse.ui.components.CProjectUtils;
 import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.jdt.annotation.NonNull;
 
 public class CInitializer {
 	private @NonNull CRegistrar pRegistrar;

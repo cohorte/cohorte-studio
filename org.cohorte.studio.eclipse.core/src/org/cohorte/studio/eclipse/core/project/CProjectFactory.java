@@ -4,6 +4,8 @@ import java.net.URI;
 
 import javax.inject.Inject;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
+import org.cohorte.studio.eclipse.api.annotations.Nullable;
 import org.cohorte.studio.eclipse.api.managers.ILogger;
 import org.cohorte.studio.eclipse.core.api.IProjectFactory;
 import org.cohorte.studio.eclipse.core.api.IProjectProvide;
@@ -14,8 +16,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 public class CProjectFactory implements IProjectFactory {
 	

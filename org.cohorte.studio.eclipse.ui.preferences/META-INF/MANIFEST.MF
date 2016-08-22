@@ -22,6 +22,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: javax.annotation,
  javax.inject,
  javax.json,
+ org.cohorte.studio.eclipse.api.annotations,
  org.cohorte.studio.eclipse.api.managers,
  org.cohorte.studio.eclipse.api.objects,
  org.eclipse.core.resources,

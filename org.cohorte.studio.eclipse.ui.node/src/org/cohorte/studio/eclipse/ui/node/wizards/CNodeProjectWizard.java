@@ -4,6 +4,7 @@ import java.net.URI;
 
 import javax.inject.Inject;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
 import org.cohorte.studio.eclipse.api.managers.ILogger;
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.core.api.IProjectFactory;
@@ -14,7 +15,6 @@ import org.cohorte.studio.eclipse.ui.node.project.CNodeContentManager;
 import org.cohorte.studio.eclipse.ui.node.project.CNodeProjectNature;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbench;

@@ -3,11 +3,11 @@ package org.cohorte.studio.eclipse.ui.node.wizards;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -97,6 +97,6 @@ public class CNodeProjectCreationPage extends WizardNewProjectCreationPage imple
 		String wName = this.pAppNameText.getText();
 		if (wName == null) wName = ""; //$NON-NLS-1$
 		aNode.setApplicationName(wName);
-		aNode.setComposer(this.pComposerButton.isEnabled());
+		aNode.setComposer(this.pComposerButton.getSelection());
 	}
 }

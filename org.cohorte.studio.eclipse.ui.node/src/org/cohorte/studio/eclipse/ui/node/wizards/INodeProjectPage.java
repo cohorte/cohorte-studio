@@ -1,8 +1,8 @@
 package org.cohorte.studio.eclipse.ui.node.wizards;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
+import org.cohorte.studio.eclipse.api.annotations.NonNullByDefault;
 import org.cohorte.studio.eclipse.api.objects.INode;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -67,5 +67,5 @@ public interface INodeProjectPage extends IWizardPage {
 		return wGroup;
 	}
 	
-	void updateModel(@NonNull INode aNode);
+	void updateModel(INode aNode);
 }

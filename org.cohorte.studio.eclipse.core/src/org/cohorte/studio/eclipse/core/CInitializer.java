@@ -5,6 +5,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
 import org.cohorte.studio.eclipse.api.managers.ICohortePreferences;
 import org.cohorte.studio.eclipse.api.managers.ILogger;
 import org.cohorte.studio.eclipse.core.api.CRegistrar;
@@ -13,7 +14,6 @@ import org.cohorte.studio.eclipse.core.preferences.CPreferences;
 import org.cohorte.studio.eclipse.core.project.CProjectFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.log.Logger;
-import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * Initialization component.

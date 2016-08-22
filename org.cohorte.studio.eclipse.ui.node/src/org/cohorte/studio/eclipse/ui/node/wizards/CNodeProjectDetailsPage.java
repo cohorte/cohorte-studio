@@ -3,14 +3,14 @@ package org.cohorte.studio.eclipse.ui.node.wizards;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
+import org.cohorte.studio.eclipse.api.annotations.Nullable;
 import org.cohorte.studio.eclipse.api.managers.ICohortePreferences;
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -108,8 +108,8 @@ public class CNodeProjectDetailsPage extends WizardPage implements INodeProjectP
 		String wName = this.pNameText.getText();
 		if (wName == null) wName = ""; //$NON-NLS-1$
 		aNode.setName(wName);
-		aNode.setAutoStart(this.pAutoStartButton.isEnabled());
-		aNode.setUseCache(this.pUseCacheButton.isEnabled());
+		aNode.setAutoStart(this.pAutoStartButton.getSelection());
+		aNode.setUseCache(this.pUseCacheButton.getSelection());
 	}
 
 	private void createNodeGroup(@NonNull Composite aContainer) {

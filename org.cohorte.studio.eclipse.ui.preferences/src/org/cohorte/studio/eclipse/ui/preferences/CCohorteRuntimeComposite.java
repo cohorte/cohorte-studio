@@ -183,6 +183,7 @@ public class CCohorteRuntimeComposite extends Composite {
 		Iterator<?> it = selection.iterator();
 		while (it.hasNext()) {
 			IRuntime data = (IRuntime) it.next();
+			if (data == null) continue;
 			try {
 				data.remove();
 				pRuntimes.remove(data);

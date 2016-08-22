@@ -273,8 +273,13 @@ public class CRuntimeDialog extends StatusDialog {
 					return;
 				}
 			}
-			this.pData.setName(pNameText.getText());
-			this.pData.setPath(pPathText.getText());
+			String wString;
+			wString = pNameText.getText();
+			if (wString == null) wString = ""; //$NON-NLS-1$
+			this.pData.setName(wString);
+			wString = pPathText.getText();
+			if (wString == null) wString = ""; //$NON-NLS-1$
+			this.pData.setPath(wString);
 			this.pData.setVersion(this.parseVersion());
 			super.okPressed();
 		}

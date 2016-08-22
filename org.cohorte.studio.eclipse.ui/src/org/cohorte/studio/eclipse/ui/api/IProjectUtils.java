@@ -1,7 +1,7 @@
 package org.cohorte.studio.eclipse.ui.api;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.ui.IWorkingSet;
 
 public interface IProjectUtils {
