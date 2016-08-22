@@ -94,6 +94,9 @@ public class CNodeProjectCreationPage extends WizardNewProjectCreationPage imple
 
 	@Override
 	public void updateModel(@NonNull INode aNode) {
-		
+		String wName = this.pAppNameText.getText();
+		if (wName == null) wName = ""; //$NON-NLS-1$
+		aNode.setApplicationName(wName);
+		aNode.setComposer(this.pComposerButton.isEnabled());
 	}
 }

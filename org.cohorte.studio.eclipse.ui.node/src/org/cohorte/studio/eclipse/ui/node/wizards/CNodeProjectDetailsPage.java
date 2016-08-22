@@ -105,7 +105,11 @@ public class CNodeProjectDetailsPage extends WizardPage implements INodeProjectP
 
 	@Override
 	public void updateModel(@NonNull INode aNode) {
-
+		String wName = this.pNameText.getText();
+		if (wName == null) wName = ""; //$NON-NLS-1$
+		aNode.setName(wName);
+		aNode.setAutoStart(this.pAutoStartButton.isEnabled());
+		aNode.setUseCache(this.pUseCacheButton.isEnabled());
 	}
 
 	private void createNodeGroup(@NonNull Composite aContainer) {

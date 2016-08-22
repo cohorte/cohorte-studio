@@ -65,6 +65,8 @@ public class CNodeProjectWizard extends Wizard implements INodeProjecrWizard {
 
 	@Override
 	public boolean performFinish() {
+		this.pCreationPage.updateModel(this.pCohorteNode);
+		this.pDetailsPage.updateModel(this.pCohorteNode);
 		IProject wProject = this.pFactory.createProject(this, new String [] { CNodeProjectNature.ID });
 		if (wProject == null) {
 			this.pLogger.warning("Project is null."); //$NON-NLS-1$
