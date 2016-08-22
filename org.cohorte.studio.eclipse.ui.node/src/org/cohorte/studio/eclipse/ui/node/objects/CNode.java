@@ -1,5 +1,6 @@
 package org.cohorte.studio.eclipse.ui.node.objects;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
 import org.cohorte.studio.eclipse.api.annotations.NonNullByDefault;
 import org.cohorte.studio.eclipse.api.annotations.Nullable;
 import org.cohorte.studio.eclipse.api.objects.INode;
@@ -79,7 +80,7 @@ public class CNode implements INode {
 	}
 
 	@Override
-	public void setRuntime(IRuntime aRuntime) {
+	public void setRuntime(@Nullable IRuntime aRuntime) {
 		this.pRuntime = aRuntime;
 	}
 

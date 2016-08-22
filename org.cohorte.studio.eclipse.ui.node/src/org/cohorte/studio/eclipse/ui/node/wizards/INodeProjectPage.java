@@ -1,6 +1,5 @@
 package org.cohorte.studio.eclipse.ui.node.wizards;
 
-import org.cohorte.studio.eclipse.api.annotations.NonNull;
 import org.cohorte.studio.eclipse.api.annotations.NonNullByDefault;
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.eclipse.jface.wizard.IWizardPage;
