@@ -8,6 +8,7 @@ import org.cohorte.studio.eclipse.api.annotations.Nullable;
 import org.cohorte.studio.eclipse.api.managers.ICohortePreferences;
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
+import org.cohorte.studio.eclipse.core.api.CUtl;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -105,9 +106,7 @@ public class CNodeProjectDetailsPage extends WizardPage implements INodeProjectP
 
 	@Override
 	public void updateModel(@NonNull INode aNode) {
-		String wName = this.pNameText.getText();
-		if (wName == null) wName = ""; //$NON-NLS-1$
-		aNode.setName(wName);
+		aNode.setName(CUtl.either(this.pNameText.getText()).or(String::new));
 		aNode.setAutoStart(this.pAutoStartButton.getSelection());
 		aNode.setUseCache(this.pUseCacheButton.getSelection());
 	}

@@ -5,6 +5,7 @@ import org.cohorte.studio.eclipse.api.annotations.Nullable;
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
 import org.cohorte.studio.eclipse.api.objects.ITransport;
+import org.cohorte.studio.eclipse.core.api.CUtl;
 
 /**
  * Cohorte node object.
@@ -25,9 +26,9 @@ public class CNode implements INode {
 	private boolean pComposer;
 	
 	public CNode() {
-		this.pName = ""; //$NON-NLS-1$
+		this.pName = new String();
 		this.pTransports = new ITransport[0];
-		this.pAppName = ""; //$NON-NLS-1$
+		this.pAppName = new String();
 	}
 
 	@Override

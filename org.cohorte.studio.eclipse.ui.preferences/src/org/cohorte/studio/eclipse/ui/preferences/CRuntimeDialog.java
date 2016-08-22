@@ -9,8 +9,11 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
+import org.cohorte.studio.eclipse.api.annotations.NonNull;
+import org.cohorte.studio.eclipse.api.annotations.Nullable;
 import org.cohorte.studio.eclipse.api.managers.ICohortePreferences;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
+import org.cohorte.studio.eclipse.core.api.CUtl;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -273,13 +276,8 @@ public class CRuntimeDialog extends StatusDialog {
 					return;
 				}
 			}
-			String wString;
-			wString = pNameText.getText();
-			if (wString == null) wString = ""; //$NON-NLS-1$
-			this.pData.setName(wString);
-			wString = pPathText.getText();
-			if (wString == null) wString = ""; //$NON-NLS-1$
-			this.pData.setPath(wString);
+			this.pData.setName(CUtl.either(pNameText.getText()).or(String::new));
+			this.pData.setPath(CUtl.either(pPathText.getText()).or(String::new));
 			this.pData.setVersion(this.parseVersion());
 			super.okPressed();
 		}
