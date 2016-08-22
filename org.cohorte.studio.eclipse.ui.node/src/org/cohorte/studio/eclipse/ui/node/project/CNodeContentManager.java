@@ -16,9 +16,11 @@ import javax.json.JsonWriter;
 import javax.json.stream.JsonGenerator;
 
 import org.cohorte.studio.eclipse.api.annotations.NonNull;
+import org.cohorte.studio.eclipse.api.objects.IHttpTransport;
 import org.cohorte.studio.eclipse.api.objects.INode;
 import org.cohorte.studio.eclipse.api.objects.IRuntime;
 import org.cohorte.studio.eclipse.api.objects.ITransport;
+import org.cohorte.studio.eclipse.api.objects.IXmppTransport;
 import org.cohorte.studio.eclipse.core.api.IProjectContentManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -88,6 +90,24 @@ public class CNodeContentManager implements IProjectContentManager<INode> {
 		JsonArrayBuilder wTransports = wJ.createArrayBuilder();
 		for (ITransport wTransport : aModel.getTransports()) {
 			wTransports.add(wTransport.getName());
+			if (wTransport instanceof IHttpTransport) {
+				IHttpTransport wHttp = (IHttpTransport) wTransport;
+				String wVer = wHttp.getVersion() == IHttpTransport.EVersion.IPV4 ? "4" : "6"; //$NON-NLS-1$//$NON-NLS-2$
+				wJson.add(IJsonKeys.TRANSPORT_HTTP, wJ.createObjectBuilder().add(IJsonKeys.HTTP_IPV, wVer));  
+			}
+			if (wTransport instanceof IXmppTransport) {
+				IXmppTransport wXmpp = (IXmppTransport) wTransport;
+				JsonObjectBuilder wJsonXmpp = wJ.createObjectBuilder()
+					.add(IJsonKeys.XMPP_SERVER, wXmpp.getHostname())
+					.add(IJsonKeys.XMPP_PORT, wXmpp.getPort());
+				if (wXmpp.getUsername() != null) {
+					wJsonXmpp
+						.add(IJsonKeys.XMPP_USER_ID, wXmpp.getUsername())
+						.add(IJsonKeys.XMPP_USER_PASSWORD, wXmpp.getPassword());
+				}
+				wJson
+					.add(IJsonKeys.TRANSPORT_XMPP, wJsonXmpp);
+			}
 		}
 		wJson.add(IJsonKeys.TRANSPORT, wTransports);
 		IRuntime wRuntime = aModel.getRuntime();
