@@ -13,8 +13,7 @@ import org.eclipse.ui.INewWizard;
  */
 public interface INodeProjecrWizard extends INewWizard, IProjectProvide {
 	
-	@NonNull
-	INode getModel();
+	@NonNull INode getModel();
 	
 
 }
