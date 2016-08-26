@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.cohorte.studio.eclipse_1.0.0.201608261814.jar" id="org.cohorte.studio.eclipse" version="1.0.0.201608261814">
+      <category name="dev_tools"/>
+   </feature>
+   <category-def name="dev_tools" label="Developer Tools">
+      <description>
+         Tools that add up to Eclipse arsenal.
+      </description>
+   </category-def>
+</site>
